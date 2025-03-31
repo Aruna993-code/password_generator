@@ -1,38 +1,40 @@
-pipeline{
+pipeline {
     agent {
         docker {
-            image 'node:18.17.1-alpine3.18'
+            image 'node:20-alpine'  // Updated to Node.js 20 or higher
         }
     }
 
     environment {
-    FIREBASE_DEPLOY_TOKEN = credentials('firebase-token')
+        FIREBASE_DEPLOY_TOKEN = credentials('firebase-token')
     }
 
-    stages{
-        stage('Building'){
-            steps{
-            sh 'npm install -g firebase-tools'
-            }
-        } 
-
-         stage('Testing'){
-            steps{
-            sh 'firebase deploy -P devops-assignment-8-testing --token "$FIREBASE_DEPLOY_TOKEN"'
+    stages {
+        stage('Building') {
+            steps {
+                sh 'npm install -g firebase-tools'
             }
         }
 
-        stage('Staging'){
-            steps{
-            sh 'firebase deploy -P devops-assignment-8-staging --token "$FIREBASE_DEPLOY_TOKEN"'
+        stage('Testing') {
+            steps {
+                sh 'firebase deploy -P devops-assignment-8-testing --token "$FIREBASE_DEPLOY_TOKEN"'
             }
         }
 
-        stage('Production'){
-            steps{
-            sh 'firebase deploy -P devops-assignment-8-production --token "$FIREBASE_DEPLOY_TOKEN"'
+        stage('Staging') {
+            steps {
+                sh 'firebase deploy -P devops-assignment-8-staging --token "$FIREBASE_DEPLOY_TOKEN"'
+            }
+        }
+
+        stage('Production') {
+            steps {
+                sh 'firebase deploy -P devops-assignment-8-production --token "$FIREBASE_DEPLOY_TOKEN"'
             }
         }
     }
+}
+
 }
 
